@@ -146,7 +146,10 @@ const WalletHandler = () => {
 		{currentTokens !== null ? 
 			currentTokens.map(token => (
 				<>
-				<Image src={token.data.image} />
+				<Image 
+					src={token.data.image} 
+					borderRaius='lg'
+				/>
 					<Box>Id: {token.data.edition}</Box>
 					<Box>Rareza: {computeRarity(token.data)}</Box>
 				</>
