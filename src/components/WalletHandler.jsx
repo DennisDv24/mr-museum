@@ -5,6 +5,7 @@ import {
 	Box, Image, Input,
 	Grid, InputGroup, InputRightElement,
 	Text, Flex, Spacer,
+	Spinner,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import MrCryptoABI from './mrCrypto.js';
@@ -49,6 +50,17 @@ const WalletHandler = () => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [currentTokens, setCurrentTokens] = useState([]);
+	const [loading, setLoading] = useState(false);
+	
+	const getUserToken = async id => {
+		try {
+			const thisIdUri = await contract.tokenURI(id);
+			const metadata = await axios.get(thisIdUri);
+			return metadata;
+		} catch (e) {
+			return getUserToken(id);
+		}
+	}
 
 	const getUserTokens = async addr => {
 		
@@ -61,20 +73,21 @@ const WalletHandler = () => {
 		
 		let tokensMetadata = [];
 		for (const id of ids) {
-			const thisIdUri = await contract.tokenURI(id);
-			const metadata = await axios.get(thisIdUri);
-			tokensMetadata.push(metadata);
+			tokensMetadata.push(await getUserToken(id));
 		}
 		setCurrentTokens(tokensMetadata);
 	}
 
 
-	const changeAccountHandle = acc => {
+	const changeAccountHandle = async acc => {
 		setDefaultAccount(acc);
-		getUserTokens(acc);
+		await getUserTokens(acc);
+		setLoading(false);
 	}
 
 	const connectWalletHandler = callback => {
+		if(loading) return;
+		setLoading(true);
 		if (userHasAnWallet()){
 			requestConnectionAndThen(result => changeAccountHandle(result[0]));
 		}
@@ -98,19 +111,15 @@ const WalletHandler = () => {
 	}
 	
 	const handleClick = async () => {
+		if(loading) return;
+		setLoading(true);
 		let n = parseInt(idInputVal);	
 		if(n < 0 || n > 9999 || isNaN(n))
 			setIdInputVal('No es una ID')
 		else {
-			const thisIdUri = await contractWithoutSigner.tokenURI(n);
-			try {
-				const metadata = await axios.get(thisIdUri);
-				setCurrentTokens([metadata]);
-			} catch (e) {
-				handleClick();
-			}
+			setCurrentTokens([await getUserToken(n)])
 		}
-
+		setLoading(false);
 
 	}
 	
@@ -152,6 +161,7 @@ const WalletHandler = () => {
 			  </InputRightElement>
 			</InputGroup>
 
+		{loading ? <Spinner /> : null} 
 		{currentTokens !== null ? 
 			currentTokens.map(token => (
 				<>
