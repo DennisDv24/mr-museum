@@ -12,8 +12,14 @@ import { ethers } from 'ethers';
 import axios from 'axios';
 
 const mrCryptoAddr = '0xeF453154766505FEB9dBF0a58E6990fd6eB66969';
-const provider = new ethers.providers.Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+let provider;
+let signer;
+try {
+	provider = new ethers.providers.Web3Provider(window.ethereum);
+	signer = provider.getSigner();
+} catch (e) {
+	console.log('User without an wallet');
+}
 
 const contract = new ethers.Contract(mrCryptoAddr, MrCryptoABI, signer);
 
@@ -152,7 +158,7 @@ const WalletHandler = () => {
         	<ModalContent>
         		<ModalHeader>Error</ModalHeader>
         		<ModalCloseButton />
-          		<ModalBody>
+          		<ModalBody pb={6}>
 					Necesita una wallet de Polygon para 
 					poder conectarse.
           		</ModalBody>
