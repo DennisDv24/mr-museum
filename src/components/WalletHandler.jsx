@@ -47,6 +47,7 @@ const WalletHandler = () => {
 	const [defaultAccount, setDefaultAccount] = useState(null);
 	const [currentTokens, setCurrentTokens] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [currentIds, setCurrentIds] = useState([]);
 	
 	const requestConnectionAndThen = callback => {
 		window.ethereum.request({method: 'eth_requestAccounts'}).then(
@@ -72,6 +73,7 @@ const WalletHandler = () => {
 			const id = await contract.tokenOfOwnerByIndex(addr, i);
 			ids.push(id);
 		}	
+		setCurrentIds(ids);
 
 		let tokensMetadata = [];
 		for (const id of ids) {
@@ -96,17 +98,6 @@ const WalletHandler = () => {
 		else callback();
 	}
 		
-	const computeRarity = data => {
-		let sum = 0;
-		for(const att in data.attributes) {
-			const currentAtt = data.attributes[att];
-			let currentPercent = rarities[currentAtt.trait_type][currentAtt.value];
-			if(currentPercent === undefined) currentPercent = 0
-			sum += currentPercent;
-		}
-		return maxRarity - sum;
-	}
-	
 	const handleClick = async () => {
 		if(loading) return;
 		setLoading(true);
@@ -114,9 +105,8 @@ const WalletHandler = () => {
 		if(n < 1 || n > 10000 || isNaN(n))
 			setIdInputVal('No es una ID válida')
 		else {
-			setCurrentTokens([await getUserToken(n, contractWithoutSigner)]);
+			setCurrentIds([n])
 		}
-		setLoading(false);
 
 	}
 	
@@ -128,13 +118,54 @@ const WalletHandler = () => {
 		return addr.substring(0, 7) + '...' + addr.substring(l-7, l);
 	}
 
-	const getColorBasedOnRarity = (data) => {
-		let r = computeRarity(data);
-		if (r > 150) 
+	const getColorBasedOnRarity = (id) => {
+		let r = rarities[id]['rank'];
+		if (r > 9000) 
 			return 'linear(to-l, #7928CA, #FF0080)';
-		if (r <= 150 && r > 100)
+		if (r <= 9000 && r > 5000)
 			return 'linear(to-l, #dd5e89, #f7bb97)';
 		return 'linear(to-l, #42275a, #734b6d)'
+	}
+	
+	const getImages = (ids) => {
+		if(ids.length > 0) {
+			let x = ids.map(id => (
+				<>
+					<Image 
+						src={rarities[id]['image']} 
+						borderRadius='lg'
+					/>
+					<Box 
+						fontSize='2xl' 
+						fontWeight='bold'
+					>
+						Id: {id}
+					</Box>
+					<Box 
+						fontSize='2xl'
+						fontWeight='bold'
+					>
+						<Flex>
+						<Box mr={2}>Rareza: top</Box><Box
+						  bgGradient={getColorBasedOnRarity(rarities[id]['rank'])}
+						  bgClip='text'
+						>{rarities[id]['rank']}</Box>
+						</Flex>
+					</Box>
+				</>
+			));
+			//setLoading(false);
+			return x;
+		}
+	}
+
+	const loadImages = ids => {
+		return (
+			<>
+				<Spinner />
+				{getImages(currentIds)}
+			</>
+		);
 	}
 
 	return (
@@ -167,35 +198,9 @@ const WalletHandler = () => {
 			  </InputRightElement>
 			</InputGroup>
 
-		{loading ? <Spinner /> : null} 
-		{currentTokens !== null ? 
-			currentTokens.map(token => (
-				<>
-					<Image 
-						src={token.data.image} 
-						borderRadius='lg'
-					/>
-					{/*<FloatingImage src={token.data.image} />*/}
-					<Box 
-						fontSize='2xl' 
-						fontWeight='bold'
-					>
-						Id: {token.data.edition}
-					</Box>
-					<Box 
-						fontSize='2xl'
-						fontWeight='bold'
-					>
-						<Flex>
-						<Box mr={2}>Rareza:</Box><Box
-						  bgGradient={getColorBasedOnRarity(token.data)}
-						  bgClip='text'
-						>{computeRarity(token.data)}</Box>
-						</Flex>
-					</Box>
-				</>
-			)) : null
-		}
+			{loading ? <Spinner /> : null} 
+			{getImages(currentIds)}
+
 
       	<Modal isOpen={isOpen} onClose={onClose}>
         	<ModalOverlay />
