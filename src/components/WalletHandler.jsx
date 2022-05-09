@@ -87,7 +87,7 @@ const WalletHandler = () => {
 
 	const computeRarity = data => {
 		const percent = computeRarityPercent(data);
-		return (10 * percent) / maxRarity;
+		return ((10 * percent) / maxRarity).toFixed(5);
 	}
 	
 	const handleClick = async () => {
@@ -96,8 +96,12 @@ const WalletHandler = () => {
 			setIdInputVal('No es una ID')
 		else {
 			const thisIdUri = await contractWithoutSigner.tokenURI(n);
-			const metadata = await axios.get(thisIdUri);
-			setCurrentTokens([metadata]);
+			try {
+				const metadata = await axios.get(thisIdUri);
+				setCurrentTokens([metadata]);
+			} catch (e) {
+				handleClick();
+			}
 		}
 
 
