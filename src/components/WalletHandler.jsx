@@ -3,7 +3,8 @@ import {
 	ModalContent, ModalHeader, ModalCloseButton,
 	ModalFooter, useDisclosure, ModalBody,
 	Box, Image, Input,
-	Grid, InputGroup, InputRightElement
+	Grid, InputGroup, InputRightElement,
+	Text, Flex, Spacer,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import MrCryptoABI from './mrCrypto.js';
@@ -127,17 +128,25 @@ const WalletHandler = () => {
 			onClick={() => connectWalletHandler(onOpen)}
 			w='100%'
 			p={6}
+			colorScheme='red'
+			variant='outline'
 		>
 			{defaultAccount === null? "Conecta tu wallet" : formatAddr(defaultAccount)}
 		</Button>
 			<InputGroup size='md' >
-			  <Input p={6}
+			  <Input 
+				  p={6}
 				  value={idInputVal}
 				  onChange={handleChange}
 				placeholder='O introduzca la ID aquí'
 			  />
 			<InputRightElement py={6} w='6rem' mr={1} >
-				<Button size='sm' onClick={handleClick}>
+				<Button 
+					size='sm' 
+					onClick={handleClick}
+				  	colorScheme='red'
+					variant='outline'
+				>
 					Ver rareza
 				</Button>
 			  </InputRightElement>
@@ -148,10 +157,25 @@ const WalletHandler = () => {
 				<>
 				<Image 
 					src={token.data.image} 
-					borderRaius='lg'
+					borderRadius='lg'
 				/>
-					<Box>Id: {token.data.edition}</Box>
-					<Box>Rareza: {computeRarity(token.data)}</Box>
+					<Box 
+						fontSize='2xl' 
+						fontWeight='bold'
+					>
+						Id: {token.data.edition}
+					</Box>
+					<Box 
+						fontSize='2xl'
+						fontWeight='bold'
+					>
+						<Flex>
+						<Box mr={2}>Rareza:</Box><Box
+						  bgGradient='linear(to-l, #7928CA, #FF0080)'
+						  bgClip='text'
+						>{computeRarity(token.data)}</Box>
+						</Flex>
+					</Box>
 				</>
 			)) : null
 		}
