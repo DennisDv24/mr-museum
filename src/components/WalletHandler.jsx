@@ -14,7 +14,13 @@ import axios from 'axios';
 const mrCryptoAddr = '0xeF453154766505FEB9dBF0a58E6990fd6eB66969';
 const provider = new ethers.providers.Web3Provider(window.ethereum);
 const signer = provider.getSigner();
+
 const contract = new ethers.Contract(mrCryptoAddr, MrCryptoABI, signer);
+
+const RPC = "https://polygon-mainnet.infura.io/v3/2b0748dfb0fb40af996afae36875897c";
+const infuraProv = new ethers.providers.JsonRpcProvider(RPC);
+const contractWithoutSigner = new ethers.Contract(mrCryptoAddr, MrCryptoABI, infuraProv);
+
 const rarities = require('./rarity.json');
 
 const userHasAnWallet = () => window.ethereum;
@@ -85,11 +91,14 @@ const WalletHandler = () => {
 	
 	const handleClick = async () => {
 		let n = parseInt(idInputVal);	
+		console.log(n);
 		if(n < 0 || n > 9999 || isNaN(n))
 			setIdInputVal('No es una ID')
 		else {
-			const thisIdUri = await contract.tokenURI(n);
+			const thisIdUri = await contractWithoutSigner.tokenURI(n);
+			console.log(thisIdUri);
 			const metadata = await axios.get(thisIdUri);
+			console.log(metadata);
 			setCurrentTokens([metadata]);
 		}
 

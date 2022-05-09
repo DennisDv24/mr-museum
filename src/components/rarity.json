@@ -20,8 +20,8 @@
 		"Green Money" : 5,
 		"Pumpkin" : 5,
 		"Spacesuit Black" : 5,
-		"Btc Bow Tie" : 4,
-		"Grey Btc" : 3,
+		"BTC Bow Tie" : 4,
+		"Grey BTC" : 3,
 		"Spacesuit White" : 1
 	},
 	"Type": {
@@ -38,8 +38,8 @@
 		"Spruce Hat" : 9,
 		"White Hat" : 9,
 		"Orange Hat" : 9,
-		"Btc White Cap" : 8,
-		"Btc Black Cap" : 7,
+		"BTC White Cap" : 8,
+		"BTC Black Cap" : 7,
 		"Pink Hat" : 5,
 		"Mint Hat" : 5,
 		"Cian Hat" : 5,
@@ -64,7 +64,7 @@
 		"Wall Street" : 6,
 		"Bad" : 6,
 		"Hollow" : 6,
-		"Btc" : 4,
+		"BTC" : 4,
 		"Bad Yellow" : 4,
 		"Laser" : 2
 	},
