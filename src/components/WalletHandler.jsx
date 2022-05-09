@@ -2,14 +2,15 @@ import {
 	Button, Modal, ModalOverlay,
 	ModalContent, ModalHeader, ModalCloseButton,
 	ModalFooter, useDisclosure, ModalBody,
-	Box, Image, Input,
+	Box, Input,
 	Grid, InputGroup, InputRightElement,
 	Text, Flex, Spacer,
-	Spinner,
+	Spinner, Image
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import MrCryptoABI from './mrCrypto.js';
 import { ethers } from 'ethers';
+import FloatingImage from './FloatingImage';
 
 import axios from 'axios';
 
@@ -35,8 +36,7 @@ const rarities = require('./rarity.json');
 const userHasAnWallet = () => window.ethereum;
 
 // NOTE this should not be hardcoded
-const minRarity = 0.01*0.01*0.001*0.001*0.02*0.02;
-const maxRarity = 0.49*0.11*0.7*0.1*0.27*0.37;
+const maxRarity = 204;
 
 
 
@@ -96,20 +96,15 @@ const WalletHandler = () => {
 		else callback();
 	}
 		
-	const computeRarityPercent = data => {
-		let sum = 1;
+	const computeRarity = data => {
+		let sum = 0;
 		for(const att in data.attributes) {
 			const currentAtt = data.attributes[att];
 			let currentPercent = rarities[currentAtt.trait_type][currentAtt.value];
-			if(currentPercent === undefined) currentPercent = 0.1
-			sum = sum * (1/currentPercent);
+			if(currentPercent === undefined) currentPercent = 0
+			sum += currentPercent;
 		}
-		return sum;
-	}
-
-	const computeRarity = data => {
-		const percent = computeRarityPercent(data);
-		return ((10 * percent) / maxRarity).toFixed(5);
+		return maxRarity - sum;
 	}
 	
 	const handleClick = async () => {
@@ -131,6 +126,15 @@ const WalletHandler = () => {
 	const formatAddr = addr => {
 		let l = addr.length;
 		return addr.substring(0, 7) + '...' + addr.substring(l-7, l);
+	}
+
+	const getColorBasedOnRarity = (data) => {
+		let r = computeRarity(data);
+		if (r > 150) 
+			return 'linear(to-l, #7928CA, #FF0080)';
+		if (r <= 150 && r > 100)
+			return 'linear(to-l, #dd5e89, #f7bb97)';
+		return 'linear(to-l, #42275a, #734b6d)'
 	}
 
 	return (
@@ -167,10 +171,11 @@ const WalletHandler = () => {
 		{currentTokens !== null ? 
 			currentTokens.map(token => (
 				<>
-				<Image 
-					src={token.data.image} 
-					borderRadius='lg'
-				/>
+					<Image 
+						src={token.data.image} 
+						borderRadius='lg'
+					/>
+					{/*<FloatingImage src={token.data.image} />*/}
 					<Box 
 						fontSize='2xl' 
 						fontWeight='bold'
@@ -183,7 +188,7 @@ const WalletHandler = () => {
 					>
 						<Flex>
 						<Box mr={2}>Rareza:</Box><Box
-						  bgGradient='linear(to-l, #7928CA, #FF0080)'
+						  bgGradient={getColorBasedOnRarity(token.data)}
 						  bgClip='text'
 						>{computeRarity(token.data)}</Box>
 						</Flex>
