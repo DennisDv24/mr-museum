@@ -114,7 +114,7 @@ const WalletHandler = () => {
 		if(loading) return;
 		setLoading(true);
 		let n = parseInt(idInputVal);	
-		if(n < 0 || n > 9999 || isNaN(n))
+		if(n < 1 || n > 10000 || isNaN(n))
 			setIdInputVal('No es una ID')
 		else {
 			setCurrentTokens([await getUserToken(n)])
