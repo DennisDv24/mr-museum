@@ -30,7 +30,7 @@
 		"Monkey" : 8,
 		"Zombie" : 4,
 		"Martian" : 1,
-		"Alien" : 0
+		"Alien" : 0.1
 	},
 	"Headwear": {
 		"Green Hat" : 10,
@@ -54,7 +54,7 @@
 		"Mchodler Red Cap" : 1,
 		"Trump Hair" : 1,
 		"White Hair" : 1,
-		"Hoodie" : 0
+		"Hoodie" : 0.1
 	},
 	"Eyes": {
 		"Classic" : 27,

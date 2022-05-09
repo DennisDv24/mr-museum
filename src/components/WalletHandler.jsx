@@ -78,7 +78,8 @@ const WalletHandler = () => {
 		let sum = 1;
 		for(const att in data.attributes) {
 			const currentAtt = data.attributes[att];
-			const currentPercent = rarities[currentAtt.trait_type][currentAtt.value];
+			let currentPercent = rarities[currentAtt.trait_type][currentAtt.value];
+			if(currentPercent === undefined) currentPercent = 0.1
 			sum = sum * (1/currentPercent);
 		}
 		return sum;
@@ -91,14 +92,11 @@ const WalletHandler = () => {
 	
 	const handleClick = async () => {
 		let n = parseInt(idInputVal);	
-		console.log(n);
 		if(n < 0 || n > 9999 || isNaN(n))
 			setIdInputVal('No es una ID')
 		else {
 			const thisIdUri = await contractWithoutSigner.tokenURI(n);
-			console.log(thisIdUri);
 			const metadata = await axios.get(thisIdUri);
-			console.log(metadata);
 			setCurrentTokens([metadata]);
 		}
 
