@@ -1,0 +1,80 @@
+{
+	"Background": {
+		"Brown" : 49,
+		"Gray" : 17,
+		"Blue" : 15,
+		"Pink" : 12,
+		"Yellow" : 5,
+		"Orange" : 2,
+		"Mint" : 1
+	},
+	"Clothes": {
+		"Classic Bow Tie" : 11,
+		"Deep Blue Simple" : 11,
+		"Green Bow Tie" : 11,
+		"Grey Bow Tie" : 11,
+		"Spruce" : 11,
+		"White Bow Tie" : 11,
+		"Pink Bow Tie" : 5,
+		"Cian Bow Tie" : 5,
+		"Green Money" : 5,
+		"Pumpkin" : 5,
+		"Spacesuit Black" : 5,
+		"Btc Bow Tie" : 4,
+		"Grey Btc" : 3,
+		"Spacesuit White" : 1
+	},
+	"Type": {
+		"Human" : 70,
+		"Cat" : 16,
+		"Monkey" : 8,
+		"Zombie" : 4,
+		"Martian" : 1,
+		"Alien" : 0
+	},
+	"Headwear": {
+		"Green Hat" : 10,
+		"Classic Hat" : 9,
+		"Spruce Hat" : 9,
+		"White Hat" : 9,
+		"Orange Hat" : 9,
+		"Btc White Cap" : 8,
+		"Btc Black Cap" : 7,
+		"Pink Hat" : 5,
+		"Mint Hat" : 5,
+		"Cian Hat" : 5,
+		"Vivid Green Gat" : 5,
+		"Purple Beanie" : 4,
+		"Orange Beanie" : 3,
+		"Xmas Beanie" : 3,
+		"Dreadlocks" : 1,
+		"Blonde Hair" : 1,
+		"Mchodler Black Cap" : 1,
+		"Mchodler Red Cap" : 1,
+		"Trump Hair" : 1,
+		"White Hair" : 1,
+		"Hoodie" : 0
+	},
+	"Eyes": {
+		"Classic" : 27,
+		"Anime" : 16,
+		"Kawaii" : 11,
+		"Dead" : 10,
+		"Small" : 9,
+		"Wall Street" : 6,
+		"Bad" : 6,
+		"Hollow" : 6,
+		"Btc" : 4,
+		"Bad Yellow" : 4,
+		"Laser" : 2
+	},
+	"Moustache": {
+		"Classic" : 37,
+		"White Moustache" : 24,
+		"Tonge" : 13,
+		"Cigar" : 13,
+		"Smile" : 7,
+		"Smile Cigar" : 4,
+		"Black Moustache" : 2
+	}
+}
