@@ -52,7 +52,7 @@ const WalletHandler = () => {
 	const [currentTokens, setCurrentTokens] = useState([]);
 	const [loading, setLoading] = useState(false);
 	
-	const getUserToken = async id => {
+	const getUserToken = async (id, contract = contract) => {
 		try {
 			const thisIdUri = await contract.tokenURI(id);
 			const metadata = await axios.get(thisIdUri);
@@ -87,8 +87,8 @@ const WalletHandler = () => {
 
 	const connectWalletHandler = callback => {
 		if(loading) return;
-		setLoading(true);
 		if (userHasAnWallet()){
+			setLoading(true);
 			requestConnectionAndThen(result => changeAccountHandle(result[0]));
 		}
 		else callback();
@@ -115,9 +115,9 @@ const WalletHandler = () => {
 		setLoading(true);
 		let n = parseInt(idInputVal);	
 		if(n < 1 || n > 10000 || isNaN(n))
-			setIdInputVal('No es una ID')
+			setIdInputVal('No es una ID válida')
 		else {
-			setCurrentTokens([await getUserToken(n)])
+			setCurrentTokens([await getUserToken(n, contractWithoutSigner)]);
 		}
 		setLoading(false);
 
