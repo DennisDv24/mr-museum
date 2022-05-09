@@ -128,6 +128,15 @@ const WalletHandler = () => {
 		return addr.substring(0, 7) + '...' + addr.substring(l-7, l);
 	}
 
+	const getColorBasedOnRarity = (data) => {
+		let r = computeRarity(data);
+		if (r > 150) 
+			return 'linear(to-l, #7928CA, #FF0080)';
+		if (r <= 150 && r > 100)
+			return 'linear(to-l, #dd5e89, #f7bb97)';
+		return 'linear(to-l, #42275a, #734b6d)'
+	}
+
 	return (
 		<>
 		<Button
@@ -179,7 +188,7 @@ const WalletHandler = () => {
 					>
 						<Flex>
 						<Box mr={2}>Rareza:</Box><Box
-						  bgGradient='linear(to-l, #7928CA, #FF0080)'
+						  bgGradient={getColorBasedOnRarity(token.data)}
 						  bgClip='text'
 						>{computeRarity(token.data)}</Box>
 						</Flex>
