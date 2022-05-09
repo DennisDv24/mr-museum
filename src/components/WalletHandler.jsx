@@ -14,8 +14,9 @@ import { ethers } from 'ethers';
 import axios from 'axios';
 
 const mrCryptoAddr = '0xeF453154766505FEB9dBF0a58E6990fd6eB66969';
-let provider;
-let signer;
+
+let provider; 
+let signer; 
 try {
 	provider = new ethers.providers.Web3Provider(window.ethereum);
 	signer = provider.getSigner();
@@ -37,11 +38,6 @@ const userHasAnWallet = () => window.ethereum;
 const minRarity = 0.01*0.01*0.001*0.001*0.02*0.02;
 const maxRarity = 0.49*0.11*0.7*0.1*0.27*0.37;
 
-const requestConnectionAndThen = callback => {
-	window.ethereum.request({method: 'eth_requestAccounts'}).then(
-		callback
-	)
-}
 
 
 
@@ -52,28 +48,34 @@ const WalletHandler = () => {
 	const [currentTokens, setCurrentTokens] = useState([]);
 	const [loading, setLoading] = useState(false);
 	
-	const getUserToken = async (id, contract = contract) => {
+	const requestConnectionAndThen = callback => {
+		window.ethereum.request({method: 'eth_requestAccounts'}).then(
+			callback
+		).catch(e => setLoading(false))
+	}
+
+	const getUserToken = async (id, contract) => {
 		try {
 			const thisIdUri = await contract.tokenURI(id);
 			const metadata = await axios.get(thisIdUri);
 			return metadata;
 		} catch (e) {
-			return getUserToken(id);
+			return getUserToken(id, contract);
 		}
 	}
 
 	const getUserTokens = async addr => {
-		
+
 		const addrBal = await contract.balanceOf(addr);
 		let ids = [];
 		for(let i = 0; i < addrBal; i++) {
 			const id = await contract.tokenOfOwnerByIndex(addr, i);
 			ids.push(id);
 		}	
-		
+
 		let tokensMetadata = [];
 		for (const id of ids) {
-			tokensMetadata.push(await getUserToken(id));
+			tokensMetadata.push(await getUserToken(id, contract));
 		}
 		setCurrentTokens(tokensMetadata);
 	}

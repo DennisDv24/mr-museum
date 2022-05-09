@@ -24,7 +24,7 @@ const Main = () => (
 		</Center>
 		<WalletHandler />
 		<Box color='#7928CA' pt={200} pos='fixed' bottom={0}>
-			Hecho por #6640
+			Página web hecha por #6640
 		</Box>
 		</VStack>
 	</Center>
